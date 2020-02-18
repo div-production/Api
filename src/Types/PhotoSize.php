@@ -19,7 +19,7 @@ class PhotoSize extends BaseType implements TypeInterface
      *
      * @var array
      */
-    static protected $requiredParams = ['file_id', 'width', 'height'];
+    static protected $requiredParams = ['file_id', 'file_unique_id', 'width', 'height'];
 
     /**
      * {@inheritdoc}
@@ -28,17 +28,25 @@ class PhotoSize extends BaseType implements TypeInterface
      */
     static protected $map = [
         'file_id' => true,
+        'file_unique_id' => true,
         'width' => true,
         'height' => true,
         'file_size' => true,
     ];
 
     /**
-     * Unique identifier for this file
+     * Download identifier for this file
      *
      * @var string
      */
     protected $fileId;
+
+    /**
+     * Unique identifier for this file
+     *
+     * @var string
+     */
+    protected $fileUniqueId;
 
     /**
      * Photo width
@@ -75,6 +83,22 @@ class PhotoSize extends BaseType implements TypeInterface
     public function setFileId($fileId)
     {
         $this->fileId = $fileId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileUniqueId()
+    {
+        return $this->fileUniqueId;
+    }
+
+    /**
+     * @param string $fileUniqueId
+     */
+    public function setFileUniqueId($fileUniqueId)
+    {
+        $this->fileUniqueId = $fileUniqueId;
     }
 
     /**

@@ -22,6 +22,7 @@ class Document extends BaseType implements TypeInterface
      */
     static protected $map = [
         'file_id' => true,
+        'file_unique_id' => true,
         'thumb' => PhotoSize::class,
         'file_name' => true,
         'mime_type' => true,
@@ -33,14 +34,21 @@ class Document extends BaseType implements TypeInterface
      *
      * @var array
      */
-    static protected $requiredParams = ['file_id'];
+    static protected $requiredParams = ['file_id', 'file_unique_id'];
+
+    /**
+     * Download identifier for this file
+     *
+     * @var string
+     */
+    protected $fileId;
 
     /**
      * Unique identifier for this file
      *
      * @var string
      */
-    protected $fileId;
+    protected $fileUniqueId;
 
     /**
      * Document thumbnail as defined by sender
@@ -84,6 +92,22 @@ class Document extends BaseType implements TypeInterface
     public function setFileId($fileId)
     {
         $this->fileId = $fileId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileUniqueId()
+    {
+        return $this->fileUniqueId;
+    }
+
+    /**
+     * @param string $fileUniqueId
+     */
+    public function setFileUniqueId($fileUniqueId)
+    {
+        $this->fileUniqueId = $fileUniqueId;
     }
 
     /**
