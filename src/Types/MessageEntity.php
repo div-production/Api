@@ -15,6 +15,7 @@ class MessageEntity extends BaseType implements TypeInterface
 {
 
     const TYPE_MENTION = 'mention';
+    const TYPE_TEXT_MENTION = 'text_mention';
     const TYPE_HASHTAG = 'hashtag';
     const TYPE_BOT_COMMAND = 'bot_command';
     const TYPE_URL = 'url';
@@ -42,6 +43,7 @@ class MessageEntity extends BaseType implements TypeInterface
         'offset' => true,
         'length' => true,
         'url' => true,
+        'user' => User::class,
     ];
 
     /**
@@ -68,11 +70,21 @@ class MessageEntity extends BaseType implements TypeInterface
     protected $length;
 
     /**
+     * @var User
+     */
+    protected $user;
+
+    /**
      * Optional. For “text_link” only, url that will be opened after user taps on the text
      *
      * @var string
      */
     protected $url;
+
+    /**
+     * @var string
+     */
+    protected $parsedValue;
 
     /**
      * @return string
@@ -136,5 +148,51 @@ class MessageEntity extends BaseType implements TypeInterface
     public function setUrl($url)
     {
         $this->url = $url;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParsedValue()
+    {
+        return $this->parsedValue;
+    }
+
+    /**
+     * @param string $parsedValue
+     */
+    public function setParsedValue($parsedValue)
+    {
+        $this->parsedValue = $parsedValue;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClearParsedValue()
+    {
+        switch ($this->getType()) {
+            case self::TYPE_MENTION:
+            case self::TYPE_BOT_COMMAND:
+                return mb_substr($this->getParsedValue(), 1, null, 'UTF-8');
+        }
+
+        return $this->getParsedValue();
     }
 }

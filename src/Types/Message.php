@@ -189,7 +189,7 @@ class Message extends BaseType implements TypeInterface
      * @var \TelegramBot\Api\Types\Video
      */
     protected $video;
-    
+
     /**
      * Optional. Message is a animation, information about the animation
      *
@@ -352,7 +352,7 @@ class Message extends BaseType implements TypeInterface
      * Optional. For messages with a caption, special entities like usernames,
      * URLs, bot commands, etc. that appear in the caption
      *
-     * @var ArrayOfMessageEntity
+     * @var MessageEntity[]
      */
     protected $captionEntities;
 
@@ -362,6 +362,15 @@ class Message extends BaseType implements TypeInterface
      * @var string
      */
     protected $connectedWebsite;
+
+    public static function fromResponse($data)
+    {
+        /** @var static $message */
+        $message = parent::fromResponse($data);
+        $message->parseEntities();
+
+        return $message;
+    }
 
     /**
      * @return string
@@ -782,7 +791,7 @@ class Message extends BaseType implements TypeInterface
     }
 
     /**
-     * @return array
+     * @return MessageEntity[]
      */
     public function getEntities()
     {
@@ -828,7 +837,7 @@ class Message extends BaseType implements TypeInterface
     {
         $this->video = $video;
     }
-    
+
     /**
      * @return Animation
      */
@@ -1010,7 +1019,7 @@ class Message extends BaseType implements TypeInterface
     }
 
     /**
-     * @return ArrayOfMessageEntity
+     * @return MessageEntity[]
      */
     public function getCaptionEntities()
     {
@@ -1039,5 +1048,35 @@ class Message extends BaseType implements TypeInterface
     public function setConnectedWebsite($connectedWebsite)
     {
         $this->connectedWebsite = $connectedWebsite;
+    }
+
+    public function parseEntities()
+    {
+        $text = $this->getText();
+
+        if ($text) {
+            $entities = $this->getEntities();
+        } else {
+            $text = $this->getCaption();
+            if (!$text) {
+                return;
+            }
+
+            $entities = $this->getCaptionEntities();
+        }
+        if (!$entities) {
+            $entities = [];
+        }
+
+        // в mb_convert_encoding и mb_substr должны быть разные BOM (BE, LE), иначе некорректно рассчитываются позиции
+        $text = mb_convert_encoding($text, 'UTF-16LE', 'UTF-8');
+
+        /** @var MessageEntity $entity */
+        foreach ($entities as $entity) {
+            $entityValue = mb_substr($text, $entity->getOffset(), $entity->getLength(), 'UTF-16BE');
+            $entityValue = mb_convert_encoding($entityValue, 'UTF-8', 'UTF-16LE');
+
+            $entity->setParsedValue($entityValue);
+        }
     }
 }
