@@ -48,6 +48,7 @@ class Message extends BaseType implements TypeInterface
         'venue' => Venue::class,
         'poll' => Poll::class,
         'new_chat_member' => User::class,
+        'new_chat_members' => ArrayOfUsers::class,
         'left_chat_member' => User::class,
         'new_chat_title' => true,
         'new_chat_photo' => ArrayOfPhotoSize::class,
@@ -238,6 +239,13 @@ class Message extends BaseType implements TypeInterface
      * @var \TelegramBot\Api\Types\User
      */
     protected $newChatMember;
+
+    /**
+     * Optional. A new members was added to the group, information about them (this member may be bot itself)
+     *
+     * @var \TelegramBot\Api\Types\User[]
+     */
+    protected $newChatMembers;
 
     /**
      * Optional. A member was removed from the group, information about them (this member may be bot itself)
@@ -676,6 +684,22 @@ class Message extends BaseType implements TypeInterface
     public function setNewChatMember($newChatMember)
     {
         $this->newChatMember = $newChatMember;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getNewChatMembers()
+    {
+        return $this->newChatMembers;
+    }
+
+    /**
+     * @param User[] $newChatMembers
+     */
+    public function setNewChatMembers($newChatMembers)
+    {
+        $this->newChatMembers = $newChatMembers;
     }
 
     /**
