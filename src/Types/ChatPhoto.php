@@ -11,7 +11,7 @@ class ChatPhoto extends BaseType
      *
      * @var array
      */
-    static protected $requiredParams = ['small_file_id', 'big_file_id'];
+    static protected $requiredParams = ['small_file_id', 'big_file_id', 'small_file_unique_id', 'big_file_unique_id'];
 
     /**
      * {@inheritdoc}
@@ -21,6 +21,8 @@ class ChatPhoto extends BaseType
     static protected $map = [
         'small_file_id' => true,
         'big_file_id' => true,
+        'small_file_unique_id' => true,
+        'big_file_unique_id' => true,
     ];
 
     /**
@@ -36,6 +38,16 @@ class ChatPhoto extends BaseType
      * @var string
      */
     protected $bigFileId;
+
+    /**
+     * @var string
+     */
+    protected $smallFileUniqueId;
+
+    /**
+     * @var string
+     */
+    protected $bigFileUniqueId;
 
     /**
      * @return string
@@ -67,5 +79,37 @@ class ChatPhoto extends BaseType
     public function setBigFileId($bigFileId)
     {
         $this->bigFileId = $bigFileId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSmallFileUniqueId()
+    {
+        return $this->smallFileUniqueId;
+    }
+
+    /**
+     * @param string $smallFileUniqueId
+     */
+    public function setSmallFileUniqueId($smallFileUniqueId)
+    {
+        $this->smallFileUniqueId = $smallFileUniqueId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBigFileUniqueId()
+    {
+        return $this->bigFileUniqueId;
+    }
+
+    /**
+     * @param string $bigFileUniqueId
+     */
+    public function setBigFileUniqueId($bigFileUniqueId)
+    {
+        $this->bigFileUniqueId = $bigFileUniqueId;
     }
 }
